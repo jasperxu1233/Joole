@@ -13,11 +13,11 @@ public interface ProductService {
 
     List<Product> findAllProduct();
 
-    Optional<List<Product>> findByManufacturer(String manufacturer);
+    List<Product> findByManufacturer(String manufacturer);
 
-    Optional<List<Product>> findByPowerMinGreaterThanEqual(double powerMin);
+    List<Product> findByPowerMinGreaterThanEqual(double powerMin);
     //need to change powerMin type to int in Product class
 
-    Optional<List<Product>> findByFanSpeedMaxIsLessThanEqual(double fanSpeedMax);
+    List<Product> findByFanSpeedMaxIsLessThanEqual(double fanSpeedMax);
     //need to change fanSpeedMax type to int in Product class
 }

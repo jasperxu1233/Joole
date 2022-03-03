@@ -30,17 +30,17 @@ public class ProductServicelmp implements ProductService {
     }
 
     @Override
-    public Optional<List<Product>> findByManufacturer(String manufacturer) {
-        return productRepository.findByManufacturer(manufacturer);
+    public List<Product> findByManufacturer(String manufacturer) {
+        return productRepository.findByManufacturer(manufacturer).orElse(null);
     }
 
     @Override
-    public Optional<List<Product>> findByPowerMinGreaterThanEqual(double powerMin) {
-        return productRepository.findByPowerMinGreaterThanEqual(powerMin);
+    public List<Product> findByPowerMinGreaterThanEqual(double powerMin) {
+        return productRepository.findByPowerMinGreaterThanEqual(powerMin).orElse(null);
     }
 
     @Override
-    public Optional<List<Product>> findByFanSpeedMaxIsLessThanEqual(double fanSpeedMax) {
-        return productRepository.findByFanSpeedMaxIsLessThanEqual(fanSpeedMax);
+    public List<Product> findByFanSpeedMaxIsLessThanEqual(double fanSpeedMax) {
+        return productRepository.findByFanSpeedMaxIsLessThanEqual(fanSpeedMax).orElse(null);
     }
 }
