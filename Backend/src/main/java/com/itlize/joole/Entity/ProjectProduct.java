@@ -1,12 +1,16 @@
 package com.itlize.joole.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name="projectProduct")
+@EntityListeners(AuditingEntityListener.class)
 public class ProjectProduct {
 
     @Id
@@ -14,34 +18,59 @@ public class ProjectProduct {
     @Column(name = "project_product_id")
     private Long id;
 
-    private Date dateCreated;
+    @CreatedDate
+    @Column(name = "project_product_created_date")
+    private Date timeCreated;
+
+    @LastModifiedDate
+    @Column(name = "project_product_modified_date")
+    private Date lastUpdated;
 
 //    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(targetEntity = Product.class, cascade = CascadeType.DETACH)
+    @Column(name = "product_id")
     private Product productId;
 
 //    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "project_id")
+    @ManyToOne(targetEntity = Project.class, cascade = CascadeType.DETACH)
+    @Column(name = "project_id")
     private Project projectId;
 
+    public ProjectProduct(Long id, Date timeCreated, Date lastUpdated,
+                          Product productId, Project projectId) {
+        this.id = id;
+        this.timeCreated = timeCreated;
+        this.lastUpdated = lastUpdated;
+        this.productId = productId;
+        this.projectId = projectId;
+    }
+
+    public ProjectProduct() {
+
+    }
+
+    public Long getId() {
+        return id;
+    }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    @Id
-    public Long getId() {
-        return id;
+    public Date getTimeCreated() {
+        return timeCreated;
     }
 
-    public Date getDateCreated() {
-        return dateCreated;
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
-        this.dateCreated = dateCreated;
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 
     public Product getProductId() {

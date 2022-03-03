@@ -1,18 +1,25 @@
 package com.itlize.joole.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.engine.internal.Cascade;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = "product")
+@Table(name = "products")
+@EntityListeners(AuditingEntityListener.class)
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "product_id")
     private Long id;
-
 
     private String manufacturer;
     private String series;
@@ -21,20 +28,20 @@ public class Product {
     private String application;
     private String mountingLocation;
     private String accessories;
-    private String modelYear;
-    private String airflow;
-    private String powerMax;
-    private String powerMin;
-    private String operatingVoltageMax;
-    private String operatingVoltageMin;
-    private String fanSpeedMax;
-    private String fanSpeedMin;
-    private String numberOfFanSpeeds;
-    private String soundAtMaxSpeed;
-    private String fanSweepDiameter;
-    private String heightMin;
-    private String heightMax;
-    private String weight;
+    private int modelYear;
+    private double airflow;
+    private double powerMax;
+    private double powerMin;
+    private double operatingVoltageMax;
+    private double operatingVoltageMin;
+    private double fanSpeedMax;
+    private double fanSpeedMin;
+    private double numberOfFanSpeeds;
+    private double soundAtMaxSpeed;
+    private double fanSweepDiameter;
+    private double heightMin;
+    private double heightMax;
+    private double weight;
 
     @ElementCollection
     private List<String> productDetails;
@@ -45,17 +52,33 @@ public class Product {
     @ElementCollection
     private Map<String, String> contact; //store as key-value pair
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    @JsonIgnore
+    @OneToMany(targetEntity = ProjectProduct.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY,
+            mappedBy = "products")
     private List<ProjectProduct> projectProductList;
+
+    @CreatedDate
+    @Column(name = "product_created_date")
+    private Date createdTime;
+
+    @LastModifiedDate
+    @Column(name = "product_modified_date")
+    private Date lastModifiedTime;
 
     public Product() {
     }
 
-    public Product(Long id, String manufacturer, String series,
-                   String model, String useType, String application, String mountingLocation, String accessories, String modelYear, String airflow, String powerMax,
-                   String powerMin, String operatingVoltageMax, String operatingVoltageMin, String fanSpeedMax, String fanSpeedMin,
-                   String numberOfFanSpeeds, String soundAtMaxSpeed, String fanSweepDiameter, String heightMin, String heightMax, String weight,
-                   List<String> productDetails, List<String> productDocumentation, Map<String, String> contact) {
+    public Product(Long id, String manufacturer, String series, String model,
+                   String useType, String application, String mountingLocation,
+                   String accessories, int modelYear, double airflow,
+                   double powerMax, double powerMin, double operatingVoltageMax,
+                   double operatingVoltageMin, double fanSpeedMax, double fanSpeedMin,
+                   double numberOfFanSpeeds, double soundAtMaxSpeed, double fanSweepDiameter,
+                   double heightMin, double heightMax, double weight,
+                   List<String> productDetails, List<String> productDocumentation, Map<String, String> contact,
+                   List<ProjectProduct> projectProductList, Date createdTime, Date lastModifiedTime) {
         this.id = id;
         this.manufacturer = manufacturer;
         this.series = series;
@@ -81,14 +104,17 @@ public class Product {
         this.productDetails = productDetails;
         this.productDocumentation = productDocumentation;
         this.contact = contact;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.projectProductList = projectProductList;
+        this.createdTime = createdTime;
+        this.lastModifiedTime = lastModifiedTime;
     }
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getManufacturer() {
@@ -115,19 +141,11 @@ public class Product {
         this.model = model;
     }
 
-    public String getModelYear() {
-        return modelYear;
-    }
-
-    public void setModelYear(String modelYear) {
-        this.modelYear = modelYear;
-    }
-
-    public String getType() {
+    public String getUseType() {
         return useType;
     }
 
-    public void setType(String useType) {
+    public void setUseType(String useType) {
         this.useType = useType;
     }
 
@@ -155,107 +173,115 @@ public class Product {
         this.accessories = accessories;
     }
 
-    public String getAirflow() {
+    public int getModelYear() {
+        return modelYear;
+    }
+
+    public void setModelYear(int modelYear) {
+        this.modelYear = modelYear;
+    }
+
+    public double getAirflow() {
         return airflow;
     }
 
-    public void setAirflow(String airflow) {
+    public void setAirflow(double airflow) {
         this.airflow = airflow;
     }
 
-    public String getPowerMax() {
+    public double getPowerMax() {
         return powerMax;
     }
 
-    public void setPowerMax(String powerMax) {
+    public void setPowerMax(double powerMax) {
         this.powerMax = powerMax;
     }
 
-    public String getPowerMin() {
+    public double getPowerMin() {
         return powerMin;
     }
 
-    public void setPowerMin(String powerMin) {
+    public void setPowerMin(double powerMin) {
         this.powerMin = powerMin;
     }
 
-    public String getOperatingVoltageMax() {
+    public double getOperatingVoltageMax() {
         return operatingVoltageMax;
     }
 
-    public void setOperatingVoltageMax(String operatingVoltageMax) {
+    public void setOperatingVoltageMax(double operatingVoltageMax) {
         this.operatingVoltageMax = operatingVoltageMax;
     }
 
-    public String getOperatingVoltageMin() {
+    public double getOperatingVoltageMin() {
         return operatingVoltageMin;
     }
 
-    public void setOperatingVoltageMin(String operatingVoltageMin) {
+    public void setOperatingVoltageMin(double operatingVoltageMin) {
         this.operatingVoltageMin = operatingVoltageMin;
     }
 
-    public String getFanSpeedMax() {
+    public double getFanSpeedMax() {
         return fanSpeedMax;
     }
 
-    public void setFanSpeedMax(String fanSpeedMax) {
+    public void setFanSpeedMax(double fanSpeedMax) {
         this.fanSpeedMax = fanSpeedMax;
     }
 
-    public String getFanSpeedMin() {
+    public double getFanSpeedMin() {
         return fanSpeedMin;
     }
 
-    public void setFanSpeedMin(String fanSpeedMin) {
+    public void setFanSpeedMin(double fanSpeedMin) {
         this.fanSpeedMin = fanSpeedMin;
     }
 
-    public String getNumberOfFanSpeeds() {
+    public double getNumberOfFanSpeeds() {
         return numberOfFanSpeeds;
     }
 
-    public void setNumberOfFanSpeeds(String numberOfFanSpeeds) {
+    public void setNumberOfFanSpeeds(double numberOfFanSpeeds) {
         this.numberOfFanSpeeds = numberOfFanSpeeds;
     }
 
-    public String getSoundAtMaxSpeed() {
+    public double getSoundAtMaxSpeed() {
         return soundAtMaxSpeed;
     }
 
-    public void setSoundAtMaxSpeed(String soundAtMaxSpeed) {
+    public void setSoundAtMaxSpeed(double soundAtMaxSpeed) {
         this.soundAtMaxSpeed = soundAtMaxSpeed;
     }
 
-    public String getFanSweepDiameter() {
+    public double getFanSweepDiameter() {
         return fanSweepDiameter;
     }
 
-    public void setFanSweepDiameter(String fanSweepDiameter) {
+    public void setFanSweepDiameter(double fanSweepDiameter) {
         this.fanSweepDiameter = fanSweepDiameter;
     }
 
-    public String getHeightMin() {
+    public double getHeightMin() {
         return heightMin;
     }
 
-    public void setHeightMin(String heightMin) {
+    public void setHeightMin(double heightMin) {
         this.heightMin = heightMin;
     }
 
-    public String getHeightMax() {
+    public double getHeightMax() {
         return heightMax;
     }
 
-    public void setHeightMax(String heightMax) {
+    public void setHeightMax(double heightMax) {
         this.heightMax = heightMax;
     }
 
-    public String getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(String weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
@@ -283,19 +309,27 @@ public class Product {
         this.contact = contact;
     }
 
-    public String getUseType() {
-        return useType;
-    }
-
-    public void setUseType(String useType) {
-        this.useType = useType;
-    }
-
     public List<ProjectProduct> getProjectProductList() {
         return projectProductList;
     }
 
     public void setProjectProductList(List<ProjectProduct> projectProductList) {
         this.projectProductList = projectProductList;
+    }
+
+    public Date getCreatedTime() {
+        return createdTime;
+    }
+
+    public void setCreatedTime(Date createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public Date getLastModifiedTime() {
+        return lastModifiedTime;
+    }
+
+    public void setLastModifiedTime(Date lastModifiedTime) {
+        this.lastModifiedTime = lastModifiedTime;
     }
 }

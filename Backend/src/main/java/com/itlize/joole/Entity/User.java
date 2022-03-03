@@ -1,42 +1,64 @@
 package com.itlize.joole.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name="user")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
-    private Long id;
+    @Column(name = "username")
+    private String username;
 
-    private String account;
     private String password;
-    private String name;
-    private String email;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "user")
+    @CreatedDate
+    @Column(name = "user_created_date")
+    private Date timeCreated;
+
+    @LastModifiedDate
+    @Column(name = "user_modified_date")
+    private Date lasUpdated;
+
+    private String role;
+
+    @JsonIgnore
+    @OneToMany(targetEntity = Project.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY,
+            mappedBy = "user")
     private List<Project> projectList;
 
-
-    public void setId(Long id) {
-        this.id = id;
+    public User(String username, String password, Date timeCreated,
+                Date lasUpdated, String role, List<Project> projectList) {
+        this.username = username;
+        this.password = password;
+        this.timeCreated = timeCreated;
+        this.lasUpdated = lasUpdated;
+        this.role = role;
+        this.projectList = projectList;
     }
 
-    public Long getId() {
-        return id;
+    public User() {
     }
 
-    public String getAccount() {
-        return account;
+    public String getUsername() {
+        return username;
     }
 
-    public void setAccount(String account) {
-        this.account = account;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -47,20 +69,28 @@ public class User {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public Date getTimeCreated() {
+        return timeCreated;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTimeCreated(Date timeCreated) {
+        this.timeCreated = timeCreated;
     }
 
-    public String getEmail() {
-        return email;
+    public Date getLasUpdated() {
+        return lasUpdated;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLasUpdated(Date lasUpdated) {
+        this.lasUpdated = lasUpdated;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public List<Project> getProjectList() {
