@@ -12,8 +12,8 @@ public interface ProjectService {
 
     Project findByProjectId(Long projectId);
 
-    Optional<List<Project>> findAllByOwner(User user);
+    Optional<List<Project>> findAllByUser(User user);
 
-    Optional<List<Project>> deleteProjectsByOwner(User user);
+    Optional<List<Project>> deleteProjectsByUser(User user);
 
 }

@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Service
 public class ProjectServicelmp implements ProjectService {
+
     @Autowired
     ProjectRepository projectRepository;
 
@@ -27,12 +28,12 @@ public class ProjectServicelmp implements ProjectService {
     }
 
     @Override
-    public Optional<List<Project>> findAllByOwner(User user) {
-        return projectRepository.findAllByOwner(user);
+    public Optional<List<Project>> findAllByUser(User user) {
+        return projectRepository.findAllByUser(user);
     }
 
     @Override
-    public Optional<List<Project>> deleteProjectsByOwner(User user) {
-        return projectRepository.deleteProjectsByOwner(user);
+    public Optional<List<Project>> deleteProjectsByUser(User user) {
+        return projectRepository.deleteProjectsByUser(user);
     }
 }

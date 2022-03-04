@@ -28,14 +28,15 @@ public class Project {
 
 
     @ManyToOne(targetEntity = User.class)
-    @Column(name = "user_id")
-    private User owner;
+//    @Column(name = "user_id")
+    private User user;
 
     @JsonIgnore
     @OneToMany (targetEntity = ProjectProduct.class,
             cascade = CascadeType.REMOVE,
-            fetch = FetchType.LAZY,
-            mappedBy = "projects")
+            fetch = FetchType.LAZY
+//            , mappedBy = "projects"
+    )
     private List<ProjectProduct> projectProductList;
 
     @CreatedDate
@@ -46,12 +47,12 @@ public class Project {
     @Column(name = "project_modified_date")
     private Date lastUpdated;
 
-    public Project(Long id, String projectName, User owner,
+    public Project(Long id, String projectName, User user,
                    List<ProjectProduct> projectProductList,
                    Date timeCreated, Date lastUpdated) {
         this.id = id;
         this.projectName = projectName;
-        this.owner = owner;
+        this.user = user;
         this.projectProductList = projectProductList;
         this.timeCreated = timeCreated;
         this.lastUpdated = lastUpdated;
@@ -76,12 +77,12 @@ public class Project {
         this.projectName = projectName;
     }
 
-    public User getOwner() {
-        return owner;
+    public User getUser() {
+        return user;
     }
 
-    public void setOwner(User owner) {
-        this.owner = owner;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<ProjectProduct> getProjectProductList() {

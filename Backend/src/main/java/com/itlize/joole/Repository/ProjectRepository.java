@@ -11,8 +11,8 @@ import java.util.Optional;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
-    Optional<List<Project>> findAllByOwner (User user);
+    Optional<List<Project>> findAllByUser (User user);
 
-    Optional<List<Project>> deleteProjectsByOwner(User user);
+    Optional<List<Project>> deleteProjectsByUser(User user);
 
 }

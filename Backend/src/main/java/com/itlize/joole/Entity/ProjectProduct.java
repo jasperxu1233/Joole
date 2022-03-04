@@ -28,12 +28,12 @@ public class ProjectProduct {
 
 //    @JsonIgnore
     @ManyToOne(targetEntity = Product.class, cascade = CascadeType.DETACH)
-    @Column(name = "product_id")
+//    @Column(name = "product_id")
     private Product productId;
 
 //    @JsonIgnore
     @ManyToOne(targetEntity = Project.class, cascade = CascadeType.DETACH)
-    @Column(name = "project_id")
+//    @Column(name = "project_id")
     private Project projectId;
 
     public ProjectProduct(Long id, Date timeCreated, Date lastUpdated,

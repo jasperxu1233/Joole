@@ -55,8 +55,9 @@ public class Product {
     @JsonIgnore
     @OneToMany(targetEntity = ProjectProduct.class,
             cascade = CascadeType.REMOVE,
-            fetch = FetchType.LAZY,
-            mappedBy = "products")
+            fetch = FetchType.LAZY
+//            , mappedBy = "products"
+    )
     private List<ProjectProduct> projectProductList;
 
     @CreatedDate
