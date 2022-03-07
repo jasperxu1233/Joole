@@ -15,5 +15,4 @@ public interface ProjectService {
     Optional<List<Project>> findAllByUser(User user);
 
     Optional<List<Project>> deleteProjectsByUser(User user);
-
 }

@@ -14,10 +14,10 @@ import java.util.List;
 @Entity
 @Table(name="user")
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class  User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "username")
     private String username;
 
@@ -40,17 +40,14 @@ public class User {
             mappedBy = "user")
     private List<Project> projectList;
 
-    public User(String username, String password, Date timeCreated,
-                Date lasUpdated, String role, List<Project> projectList) {
-        this.username = username;
-        this.password = password;
-        this.timeCreated = timeCreated;
-        this.lasUpdated = lasUpdated;
-        this.role = role;
-        this.projectList = projectList;
-    }
 
     public User() {
+    }
+
+    public User(String username, String password,   String role ) {
+        this.username = username;
+        this.password = password;
+        this.role = role;
     }
 
     public String getUsername() {
@@ -99,5 +96,16 @@ public class User {
 
     public void setProjectList(List<Project> projectList) {
         this.projectList = projectList;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", timeCreated=" + timeCreated +
+                ", lasUpdated=" + lasUpdated +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

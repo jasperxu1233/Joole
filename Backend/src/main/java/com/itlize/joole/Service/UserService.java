@@ -7,12 +7,5 @@ import java.util.Optional;
 public interface UserService {
     User createUser(User user);
 
-    User findByUserId(Long userId);
-
     User findByUsername(String username);
-
-    void signIn(User user);
-
-    void signUp(User user);
-
 }

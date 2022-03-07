@@ -35,7 +35,7 @@ public class Project {
     @OneToMany (targetEntity = ProjectProduct.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY
-//            , mappedBy = "projects"
+//            , mappedBy = "projects"               //=> what cost the entityManagerFactory errors
     )
     private List<ProjectProduct> projectProductList;
 
@@ -47,18 +47,13 @@ public class Project {
     @Column(name = "project_modified_date")
     private Date lastUpdated;
 
-    public Project(Long id, String projectName, User user,
-                   List<ProjectProduct> projectProductList,
-                   Date timeCreated, Date lastUpdated) {
+    public Project() {
+    }
+
+    public Project(Long id, String projectName, User user) {
         this.id = id;
         this.projectName = projectName;
         this.user = user;
-        this.projectProductList = projectProductList;
-        this.timeCreated = timeCreated;
-        this.lastUpdated = lastUpdated;
-    }
-
-    public Project() {
     }
 
     public Long getId() {
@@ -107,5 +102,16 @@ public class Project {
 
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
+    }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", projectName='" + projectName + '\'' +
+                ", user=" + user +
+                ", timeCreated=" + timeCreated +
+                ", lastUpdated=" + lastUpdated +
+                '}';
     }
 }

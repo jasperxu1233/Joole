@@ -13,7 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     List<Product> findAll();
 
     //Optional: will return objects or null, prevent throwing Exception
-    Optional<List<Product>> findByManufacturer(String manuf);
+    Optional<List<Product>> findByManufacturer(String manufacturer);
 
     Optional<List<Product>> findByPowerMinGreaterThanEqual(double powerMin);
 

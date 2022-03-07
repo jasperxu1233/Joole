@@ -43,14 +43,15 @@ public class Product {
     private double heightMax;
     private double weight;
 
-    @ElementCollection
-    private List<String> productDetails;
 
-    @ElementCollection
-    private List<String> productDocumentation;  // add the link of the file as string here
-
-    @ElementCollection
-    private Map<String, String> contact; //store as key-value pair
+//    @ElementCollection
+//    private List<String> productDetails;
+//
+//    @ElementCollection
+//    private List<String> productDocumentation;  // add the link of the file as string here
+//
+//    @ElementCollection
+//    private Map<String, String> contact; //store as key-value pair
 
     @JsonIgnore
     @OneToMany(targetEntity = ProjectProduct.class,
@@ -77,9 +78,7 @@ public class Product {
                    double powerMax, double powerMin, double operatingVoltageMax,
                    double operatingVoltageMin, double fanSpeedMax, double fanSpeedMin,
                    double numberOfFanSpeeds, double soundAtMaxSpeed, double fanSweepDiameter,
-                   double heightMin, double heightMax, double weight,
-                   List<String> productDetails, List<String> productDocumentation, Map<String, String> contact,
-                   List<ProjectProduct> projectProductList, Date createdTime, Date lastModifiedTime) {
+                   double heightMin, double heightMax, double weight) {
         this.id = id;
         this.manufacturer = manufacturer;
         this.series = series;
@@ -102,12 +101,6 @@ public class Product {
         this.heightMin = heightMin;
         this.heightMax = heightMax;
         this.weight = weight;
-        this.productDetails = productDetails;
-        this.productDocumentation = productDocumentation;
-        this.contact = contact;
-        this.projectProductList = projectProductList;
-        this.createdTime = createdTime;
-        this.lastModifiedTime = lastModifiedTime;
     }
 
     public Long getId() {
@@ -286,29 +279,29 @@ public class Product {
         this.weight = weight;
     }
 
-    public List<String> getProductDetails() {
-        return productDetails;
-    }
-
-    public void setProductDetails(List<String> productDetails) {
-        this.productDetails = productDetails;
-    }
-
-    public List<String> getProductDocumentation() {
-        return productDocumentation;
-    }
-
-    public void setProductDocumentation(List<String> productDocumentation) {
-        this.productDocumentation = productDocumentation;
-    }
-
-    public Map<String, String> getContact() {
-        return contact;
-    }
-
-    public void setContact(Map<String, String> contact) {
-        this.contact = contact;
-    }
+//    public List<String> getProductDetails() {
+//        return productDetails;
+//    }
+//
+//    public void setProductDetails(List<String> productDetails) {
+//        this.productDetails = productDetails;
+//    }
+//
+//    public List<String> getProductDocumentation() {
+//        return productDocumentation;
+//    }
+//
+//    public void setProductDocumentation(List<String> productDocumentation) {
+//        this.productDocumentation = productDocumentation;
+//    }
+//
+//    public Map<String, String> getContact() {
+//        return contact;
+//    }
+//
+//    public void setContact(Map<String, String> contact) {
+//        this.contact = contact;
+//    }
 
     public List<ProjectProduct> getProjectProductList() {
         return projectProductList;
@@ -332,5 +325,35 @@ public class Product {
 
     public void setLastModifiedTime(Date lastModifiedTime) {
         this.lastModifiedTime = lastModifiedTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "id=" + id +
+                ", manufacturer='" + manufacturer + '\'' +
+                ", series='" + series + '\'' +
+                ", model='" + model + '\'' +
+                ", useType='" + useType + '\'' +
+                ", application='" + application + '\'' +
+                ", mountingLocation='" + mountingLocation + '\'' +
+                ", accessories='" + accessories + '\'' +
+                ", modelYear=" + modelYear +
+                ", airflow=" + airflow +
+                ", powerMax=" + powerMax +
+                ", powerMin=" + powerMin +
+                ", operatingVoltageMax=" + operatingVoltageMax +
+                ", operatingVoltageMin=" + operatingVoltageMin +
+                ", fanSpeedMax=" + fanSpeedMax +
+                ", fanSpeedMin=" + fanSpeedMin +
+                ", numberOfFanSpeeds=" + numberOfFanSpeeds +
+                ", soundAtMaxSpeed=" + soundAtMaxSpeed +
+                ", fanSweepDiameter=" + fanSweepDiameter +
+                ", heightMin=" + heightMin +
+                ", heightMax=" + heightMax +
+                ", weight=" + weight +
+                ", createdTime=" + createdTime +
+                ", lastModifiedTime=" + lastModifiedTime +
+                '}';
     }
 }

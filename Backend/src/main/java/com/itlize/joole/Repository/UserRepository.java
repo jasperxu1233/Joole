@@ -8,11 +8,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
-
-//     void signIn(User user);
-//
-//    void signUp(User user);
+public interface UserRepository extends JpaRepository<User, String> {
 
 }

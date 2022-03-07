@@ -28,25 +28,21 @@ public class ProjectProduct {
 
 //    @JsonIgnore
     @ManyToOne(targetEntity = Product.class, cascade = CascadeType.DETACH)
-//    @Column(name = "product_id")
-    private Product productId;
+//    @Column(name = "product")
+    private Product product;
 
 //    @JsonIgnore
     @ManyToOne(targetEntity = Project.class, cascade = CascadeType.DETACH)
-//    @Column(name = "project_id")
-    private Project projectId;
-
-    public ProjectProduct(Long id, Date timeCreated, Date lastUpdated,
-                          Product productId, Project projectId) {
-        this.id = id;
-        this.timeCreated = timeCreated;
-        this.lastUpdated = lastUpdated;
-        this.productId = productId;
-        this.projectId = projectId;
-    }
+//    @Column(name = "project")
+    private Project project;
 
     public ProjectProduct() {
+    }
 
+    public ProjectProduct(Long id, Product product, Project project) {
+        this.id = id;
+        this.product = product;
+        this.project = project;
     }
 
     public Long getId() {
@@ -73,19 +69,30 @@ public class ProjectProduct {
         this.lastUpdated = lastUpdated;
     }
 
-    public Product getProductId() {
-        return productId;
+    public Product getProduct() {
+        return product;
     }
 
-    public void setProductId(Product productId) {
-        this.productId = productId;
+    public void setProduct(Product product) {
+        this.product = product;
     }
 
-    public Project getProjectId() {
-        return projectId;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjectId(Project projectId) {
-        this.projectId = projectId;
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    @Override
+    public String toString() {
+        return "ProjectProduct{" +
+                "id=" + id +
+                ", timeCreated=" + timeCreated +
+                ", lastUpdated=" + lastUpdated +
+                ", product=" + product +
+                ", project=" + project +
+                '}';
     }
 }

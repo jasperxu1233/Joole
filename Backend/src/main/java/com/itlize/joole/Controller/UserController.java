@@ -8,14 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
-    @PostMapping("/signUp")
-    public void signUp() {
-
-    }
-
-    @GetMapping("/login")
-    public void login() {
+    @PostMapping("/create")
+    public void createUser() {
 
     }
 
@@ -23,17 +17,4 @@ public class UserController {
     public void deleteUser() {
 
     }
-
-//    @PostMapping("/signUp/manufacturer")
-//    public void addManufacturer() {
-//
-//    }
-//
-//    @PostMapping("/signUp/admin")
-//    public void addAdministration() {
-//
-//    }
-    //waiting to implement // token or session?
-    //waiting to implement // token or session?
-
 }

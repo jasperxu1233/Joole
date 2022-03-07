@@ -18,23 +18,10 @@ public class UserServicelmp implements UserService {
         return userRepository.save(user);
     }
 
-    @Override
-    public User findByUserId(Long userId) {
-        return userRepository.findById(userId).orElse(null);
-    }
-
-    @Override
     public User findByUsername(String username) {
-        return userRepository.findByUsername(username).orElse(null);
+        return userRepository.findById(username).orElse(null);
     }
 
-    @Override
-    public void signIn(User user) {
 
-    }
-
-    @Override
-    public void signUp(User user) {
-
-    }
 }
+
