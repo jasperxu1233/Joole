@@ -1,42 +1,30 @@
 package com.itlize.joole.Controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.itlize.joole.Entity.Product;
+import com.itlize.joole.Service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/products")
 public class ProductController {
 
+    @Autowired
+    ProductService productService;
+
     @GetMapping("/getAllProduct")
-    public void getAllProducts() {
-
+    public ResponseEntity<?> getAllProducts() {
+        List<Product> products = productService.findAllProduct();
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @GetMapping("/getProduct")
-    public void getProduct() {
-
+    @PostMapping("/search")
+    public ResponseEntity searchProduct(@RequestParam(name = "manufacturer") String manufacturer) {
+        List<Product> products = productService.findAllByManufacturer(manufacturer);
+        return new ResponseEntity<>(products, HttpStatus.OK);
     }
-
-    @PostMapping("/addProduct")
-    public void addProduct() {
-
-    }
-
-    @PostMapping("/deleteProduct")
-    public void deleteProduct() {
-
-    }
-
-    @PostMapping("/deleteAllProduct")
-    public void deleteAllProducts() {
-
-    }
-
-    @PostMapping("/updateProduct")
-    public void updateProduct() {
-
-    }
-
 }

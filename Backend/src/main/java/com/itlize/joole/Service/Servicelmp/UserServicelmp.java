@@ -22,6 +22,21 @@ public class UserServicelmp implements UserService {
         return userRepository.findById(username).orElse(null);
     }
 
+//    new
+    @Override
+    public void updateUser(User userUpdated) {
+        User userFromDB = userRepository.findById(userUpdated.getUsername()).orElse(null);
+        userFromDB.setPassword(userUpdated.getPassword());
+        userFromDB.setRole(userUpdated.getRole());
+        userRepository.save(userFromDB);
+    }
+
+    //new
+    @Override
+    public void deleteByUsername(String username) {
+        userRepository.deleteByUsername(username);
+    }
+
 
 }
 

@@ -8,4 +8,10 @@ public interface UserService {
     User createUser(User user);
 
     User findByUsername(String username);
+
+    //update
+    void updateUser(User user);
+
+    //delete
+    void deleteByUsername(String username);
 }

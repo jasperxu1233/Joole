@@ -15,7 +15,13 @@ public interface ProjectProductService {
 
     void deleteByProductIdAndProjectId(Long productId, Long projectId);
 
-    Optional<List<ProjectProduct>> findByProjectId(Long projectId);
+    List<ProjectProduct> findByProjectId(Long projectId);
 
+    List<ProjectProduct> findByProductId(Long productId);
 
+//    //new
+//    void deleteByProduct(Product product);
+//
+//    //new
+//    void deleteByProject(Project project);
 }

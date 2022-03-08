@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import javax.transaction.Transactional;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -50,5 +52,37 @@ class UserServiceTest {
         assertEquals(user3.getUsername(), expected.getUsername());
         assertEquals(user3.getPassword(), expected.getPassword());
         assertEquals(user3.getRole(), expected.getRole());
+    }
+
+    //new
+    @Test
+    void updateUser() {
+        System.out.println("---------------------");
+        User user4 = new User("user.test4", "44444", "basic");
+        userService.createUser(user4);
+
+        System.out.println(user4);
+
+        user4.setPassword("404040");
+        userService.updateUser(user4);
+
+        System.out.println(user4);
+
+        assertEquals(userService.findByUsername("user.test4").getPassword(), "404040");
+    }
+
+    //new
+    @Test
+    @Transactional
+    void deleteByUsername() {
+        System.out.println("---------------------");
+        User user5 = new User("user.test5", "55555", "basic");
+        userService.createUser(user5);
+
+        System.out.println(user5);
+
+        userService.deleteByUsername("user.test5");
+
+        assertNull(userService.findByUsername("user.test5"));
     }
 }

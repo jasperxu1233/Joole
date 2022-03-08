@@ -28,12 +28,20 @@ public class ProjectServicelmp implements ProjectService {
     }
 
     @Override
-    public Optional<List<Project>> findAllByUser(User user) {
-        return projectRepository.findAllByUser(user);
+    public List<Project> findAllByUser(User user) {
+        return projectRepository.findAllByUser(user).orElse(null);
     }
 
     @Override
-    public Optional<List<Project>> deleteProjectsByUser(User user) {
-        return projectRepository.deleteProjectsByUser(user);
+    public void deleteProjectByProjectId(Long id) {
+        projectRepository.deleteProjectById(id);
+    }
+
+    //new
+    @Override
+    public void updateProject(Project projectUpdated) {
+        Project projectFromDB = projectRepository.findById(projectUpdated.getId()).orElse(null);
+        projectFromDB.setProjectName(projectUpdated.getProjectName());
+        projectRepository.save(projectFromDB);
     }
 }

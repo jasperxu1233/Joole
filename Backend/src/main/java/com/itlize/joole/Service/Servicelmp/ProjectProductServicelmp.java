@@ -32,7 +32,24 @@ public class ProjectProductServicelmp implements ProjectProductService {
     }
 
     @Override
-    public Optional<List<ProjectProduct>> findByProjectId(Long projectId) {
-        return projectProductRepository.findByProjectId(projectId);
+    public List<ProjectProduct> findByProjectId(Long projectId) {
+        return projectProductRepository.findByProjectId(projectId).orElse(null);
     }
+
+    @Override
+    public List<ProjectProduct> findByProductId(Long productId) {
+        return projectProductRepository.findByProductId(productId).orElse(null);
+    }
+
+//    @Override
+//    public void deleteByProduct(Product product) {
+//        projectProductRepository.deleteByProduct(product);
+//    }
+//
+//    @Override
+//    public void deleteByProject(Project project) {
+//        projectProductRepository.deleteByProject(project);
+//    }
+
+
 }
