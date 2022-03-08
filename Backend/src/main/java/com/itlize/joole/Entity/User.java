@@ -40,6 +40,7 @@ public class  User {
             mappedBy = "user")
     private List<Project> projectList;
 
+//    principal.projectList.add(new Projet);
 
     public User() {
     }

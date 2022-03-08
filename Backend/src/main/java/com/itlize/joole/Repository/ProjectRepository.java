@@ -16,5 +16,11 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     void deleteProjectById(Long id);
 
+    void deleteByProjectName(String projectName);
 
+    Project findByProjectName(String projectName);
+
+//    void deleteAllByUser(User user);
+
+    Optional<List<Project>> deleteAllByUser(User user);
 }

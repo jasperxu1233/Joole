@@ -8,8 +8,8 @@ import com.itlize.joole.Service.ProjectProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProjectProductServicelmp implements ProjectProductService {
@@ -22,13 +22,22 @@ public class ProjectProductServicelmp implements ProjectProductService {
     }
 
     @Override
+    public ProjectProduct addProductToProject(Project project, Product product) {
+        ProjectProduct projectProduct = new ProjectProduct();
+        projectProduct.setProduct(product);
+        projectProduct.setProject(project);
+        createProjectProduct(projectProduct);
+        return projectProduct;
+    }
+
+    @Override
     public ProjectProduct findById(Long projectProductId) {
         return projectProductRepository.findById(projectProductId).orElse(null);
     }
 
     @Override
-    public void deleteByProductIdAndProjectId(Long productId, Long projectId) {
-        projectProductRepository.deleteByProductIdAndProjectId(productId, projectId);
+    public ProjectProduct deleteByProductIdAndProjectId(Long productId, Long projectId) {
+        return projectProductRepository.deleteByProductIdAndProjectId(productId, projectId);
     }
 
     @Override
@@ -39,6 +48,32 @@ public class ProjectProductServicelmp implements ProjectProductService {
     @Override
     public List<ProjectProduct> findByProductId(Long productId) {
         return projectProductRepository.findByProductId(productId).orElse(null);
+    }
+
+    @Override
+    public List<Product> findAllProductByProjectId(Long projectId) {
+        List<Product> products = new ArrayList<>();
+        List<ProjectProduct> projectProducts = projectProductRepository.findByProjectId(projectId).orElse(null);
+        if(projectProducts == null){
+            return null;
+        }
+        for (ProjectProduct projectProduct : projectProducts) {
+            products.add(projectProduct.getProduct());
+        }
+        return products;
+    }
+
+    @Override
+    public List<Project> findAllProjectByProductId(Long productId) {
+        List<Project> projects = new ArrayList<>();
+        List<ProjectProduct> projectProducts = projectProductRepository.findByProductId(productId).orElse(null);
+        if(projectProducts == null){
+            return null;
+        }
+        for (ProjectProduct projectProduct : projectProducts) {
+            projects.add(projectProduct.getProject());
+        }
+        return projects;
     }
 
 //    @Override

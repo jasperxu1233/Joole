@@ -22,8 +22,9 @@ public class ProductController {
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
-    @PostMapping("/search")
-    public ResponseEntity searchProduct(@RequestParam(name = "manufacturer") String manufacturer) {
+    //couldnt test
+    @GetMapping("/search")
+    public ResponseEntity<?> searchProduct(@RequestParam(name = "manufacturer") String manufacturer) {
         List<Product> products = productService.findAllByManufacturer(manufacturer);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }

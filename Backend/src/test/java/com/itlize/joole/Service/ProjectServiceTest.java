@@ -100,16 +100,16 @@ class ProjectServiceTest {
         Assertions.assertEquals(projectService.findAllByUser(user7).size(), 0);
     }
 
-    @Test
-    void updateProject() {
-        User user8 = new User("project.user8", "888", "basic");
-        userService.createUser(user8);
-
-        Project project8 = new Project(8L,"project.test8", user8);
-        projectService.creatProject(project8);
-
-        project8.setProjectName("project.test8 NEW NAME");
-        projectService.updateProject(project8);
-        Assertions.assertEquals(projectService.findByProjectId(project8.getId()).getProjectName(), "project.test8 NEW NAME");
-    }
+//    @Test
+//    void updateProject() {
+//        User user8 = new User("project.user8", "888", "basic");
+//        userService.createUser(user8);
+//
+//        Project project8 = new Project(8L,"project.test8", user8);
+//        projectService.creatProject(project8);
+//
+//        project8.setProjectName("project.test8 NEW NAME");
+//        projectService.updateProject(project8);
+//        Assertions.assertEquals(projectService.findByProjectId(project8.getId()).getProjectName(), "project.test8 NEW NAME");
+//    }
 }
