@@ -12,9 +12,11 @@ public interface ProjectProductService {
 
     ProjectProduct addProductToProject(Project project, Product product);
 
+//    ProjectProduct addProductToProjectUsingId(Long productId, Long projectId);
+
     ProjectProduct findById(Long projectProductId);
 
-    ProjectProduct deleteByProductIdAndProjectId(Long productId, Long projectId);
+    void deleteByProductIdAndProjectId(Long productId, Long projectId);
 
     List<ProjectProduct> findByProjectId(Long projectId);
 

@@ -43,25 +43,29 @@ class ProjectServiceTest {
     }
 
     @Test
+  //  @Transactional
     void findByProjectId() {
-        User user3 = new User("project.user3", "333", "basic");
-        userService.createUser(user3);
-        user3 = userService.findByUsername("project.user3");
+ //       User user3 = new User("project.user3", "333", "basic");
+ //       userService.createUser(user3);
+  //      user3 = userService.findByUsername("project.user3");
 
-        Project project3 = new Project();
-        project3.setProjectName("project.test3");
-        project3.setId(3L);
-        project3.setUser(user3);
+         User userTester = userService.findByUsername("test1");
 
-        projectService.creatProject(project3);
+        Project project4 = new Project();
+        project4.setProjectName("project.test4");
 
-        Project project4 = projectService.findByProjectId(3L);
+        project4.setUser(userTester);
 
-        System.out.println(project3);
+        projectService.creatProject(project4);
 
-        Assertions.assertEquals(project3.getProjectName(), project4.getProjectName());
-        Assertions.assertEquals(project3.getId(), project4.getId());
-        Assertions.assertEquals(project3.getUser().toString(), project4.getUser().toString());
+//        Project project4 = projectService.findByProjectId(334L);
+
+//        System.out.println(project3);
+        System.out.println(project4);
+
+        Assertions.assertEquals(project4.getProjectName(),  projectService.findByProjectId(project4.getId()).getProjectName());
+       // Assertions.assertEquals(project3.getId(), project4.getId());
+      //  Assertions.assertEquals(project3.getUser().toString(), project4.getUser().toString());
     }
 
     @Test

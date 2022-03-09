@@ -17,13 +17,13 @@ public class ProductController {
     ProductService productService;
 
     @GetMapping("/getAllProduct")
-    public ResponseEntity<?> getAllProducts() {
+    public ResponseEntity<?> getAllProducts() {     //all users can get all products from the product pool.
         List<Product> products = productService.findAllProduct();
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
     //couldnt test
-    @GetMapping("/search")
+    @GetMapping("/search")     //all users can search products from the product pool.
     public ResponseEntity<?> searchProduct(@RequestParam(name = "manufacturer") String manufacturer) {
         List<Product> products = productService.findAllByManufacturer(manufacturer);
         return new ResponseEntity<>(products, HttpStatus.OK);

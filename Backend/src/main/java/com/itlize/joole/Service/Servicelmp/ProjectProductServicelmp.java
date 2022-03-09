@@ -8,6 +8,7 @@ import com.itlize.joole.Service.ProjectProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,14 +31,24 @@ public class ProjectProductServicelmp implements ProjectProductService {
         return projectProduct;
     }
 
+//    @Override
+//    public ProjectProduct addProductToProjectUsingId(Long productId, Long projectId) {
+//        ProjectProduct projectProduct = new ProjectProduct();
+//        projectProduct.setProduct(productService.);
+//        projectProduct.setProject(project);
+//        createProjectProduct(projectProduct);
+//        return projectProduct;
+//    }
+
     @Override
     public ProjectProduct findById(Long projectProductId) {
         return projectProductRepository.findById(projectProductId).orElse(null);
     }
 
     @Override
-    public ProjectProduct deleteByProductIdAndProjectId(Long productId, Long projectId) {
-        return projectProductRepository.deleteByProductIdAndProjectId(productId, projectId);
+    @Transactional
+    public void deleteByProductIdAndProjectId(Long productId, Long projectId) {
+        projectProductRepository.deleteByProductIdAndProjectId(productId, projectId);
     }
 
     @Override

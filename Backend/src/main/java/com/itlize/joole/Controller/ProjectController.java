@@ -41,7 +41,7 @@ public class ProjectController {        //NOT BEEN TESTED
     }
 
     @GetMapping("/getAllProject")
-    public ResponseEntity<?> getAllProjects(
+    public ResponseEntity<?> getAllProjects( //get all projects from current user
 //            Principal principal
     ) {
 //        User currentUser = getCurrentUser(principal);
@@ -51,6 +51,7 @@ public class ProjectController {        //NOT BEEN TESTED
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+    //check if this project belogs to user
     @GetMapping("/getProject")
     public ResponseEntity<?> getProject(@RequestParam(name = "projectName") String projectName)  {
         Project project = projectService.findByProjectName(projectName);
@@ -117,23 +118,47 @@ public class ProjectController {        //NOT BEEN TESTED
         return new ResponseEntity<>(project, HttpStatus.OK);
     }
 
+//    @PostMapping("/addProductToProject")
+//    public ResponseEntity<?> addProductToProject(@RequestBody Project project, @RequestBody Product product) {
+//        ProjectProduct projectProduct = projectProductService.addProductToProject(project, product);
+//        return new ResponseEntity<>(projectProduct, HttpStatus.OK);
+//    }
+
+//    @DeleteMapping("/deleteProductFromProject")
+//    public ResponseEntity<?> deleteProductFromProject(@RequestBody Project project, @RequestBody Product product) {
+//        ProjectProduct projectProduct = projectProductService.deleteByProductIdAndProjectId(product.getId(), project.getId());
+//        return new ResponseEntity<>(projectProduct, HttpStatus.OK);
+//    }
+
     @PostMapping("/addProductToProject")
-    public ResponseEntity<?> addProductToProject(@RequestBody Project project, @RequestBody Product product) {
-        ProjectProduct projectProduct = projectProductService.addProductToProject(project, product);
+    public ResponseEntity<?> addProductToProject(
+//            Principal principal,
+             @RequestParam(name = "projectId") String projectId,    //maybe change to projectName?
+             @RequestParam(name = "productId") String productId) {  //maybe change to productName?
+        //check first before adding, if ProjectProduct exist => do nothing, otherwise add it.
+        ProjectProduct projectProduct = projectProductService.addProductToProject(
+                projectService.findByProjectId(Long.valueOf(projectId)), productService.findByProductId(Long.valueOf(productId)));
         return new ResponseEntity<>(projectProduct, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteProductFromProject")
-    public ResponseEntity<?> deleteProductFromProject(@RequestBody Project project, @RequestBody Product product) {
-        ProjectProduct projectProduct = projectProductService.deleteByProductIdAndProjectId(product.getId(), project.getId());
-        return new ResponseEntity<>(projectProduct, HttpStatus.OK);
+    @Transactional
+    public ResponseEntity<?> deleteProductFromProject(
+            //            Principal principal,
+            @RequestParam(name = "projectId") String projectId,     //maybe change to projectName?
+            @RequestParam(name = "productId") String productId) {   //maybe change to productName?
+        projectProductService.deleteByProductIdAndProjectId(Long.valueOf(productId), Long.valueOf(projectId));
+        String message = "The product with id: " + productId + " has been deleted " + "from project with id: " + projectId;
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
+    //should be with username instead of id
     @GetMapping("/getAllProductByProjectId")
     public  List<Product> getAllProductByProjectId(@RequestParam(name = "projectId") Long projectId) {
         return projectProductService.findAllProductByProjectId(projectId);
     }
 
+    //should be with username instead of id
     @GetMapping("/getAllProjectByProductId")
     public List<Project> getAllProjectByProductId(@RequestParam(name = "productId") Long productId) {
         return projectProductService.findAllProjectByProductId(productId);
