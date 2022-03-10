@@ -31,7 +31,9 @@ public class  User {
     @Column(name = "user_modified_date")
     private Date lasUpdated;
 
-    private String role;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
 
     @JsonIgnore
     @OneToMany(targetEntity = Project.class,
@@ -45,10 +47,9 @@ public class  User {
     public User() {
     }
 
-    public User(String username, String password,   String role ) {
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.role = role;
     }
 
     public String getUsername() {
@@ -83,11 +84,11 @@ public class  User {
         this.lasUpdated = lasUpdated;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 

@@ -28,4 +28,8 @@ public class ProductController {
         List<Product> products = productService.findAllByManufacturer(manufacturer);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
+
+    //add several search: airflow,
+    //by range
+    //and retrieve a list
 }
