@@ -1,8 +1,11 @@
 package com.itlize.joole;
 
+import com.itlize.joole.Filter.JwtRequestFilter;
+import com.itlize.joole.Service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -20,8 +23,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootApplication
-@EnableJpaAuditing
+@SpringBootApplication(exclude = {SecurityAutoConfiguration.class })
+//@EnableJpaAuditing
 public class JooleApplication {
 
     public static void main(String[] args) {
@@ -31,16 +34,69 @@ public class JooleApplication {
 
 
 
-
-
-
-
-
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    MyUserDetailsService myUserDetailsService;
+
+    @Autowired
+    private JwtRequestFilter jwtRequestFilter;
+
+    @Override
+    @Bean
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder () {
+        return  new BCryptPasswordEncoder();
+    }
+
+    @Autowired
+    //Authentication
+    public void configure(AuthenticationManagerBuilder auth) throws Exception{
+        // Configure database-based user password query.
+        // Password uses BCryptEncoder (combined with random salt and encryption algorithm) that comes with security.
+        //Override the UserdatailsService class
+        auth.userDetailsService(myUserDetailsService)
+                //Override the default password verification class
+                .passwordEncoder(passwordEncoder());
+    }
+
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
 
 
+        httpSecurity.csrf().disable()
+                //Cross-origin-resource-sharing
+                .cors().and()
+                .authorizeRequests()
+                .antMatchers("/users/login").permitAll()
+                .antMatchers("/users/register").permitAll()
+//                .antMatchers("/users/admin/**").hasRole("ADMIN")
+                .anyRequest().fullyAuthenticated();// others need to be accessed after authentication
+
+        // redirect to the login page
+        httpSecurity
+                .exceptionHandling().and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+    }
+
+
+//    @Bean
+//    public WebMvcConfigurer corsConfigure() {
+//        return new WebMvcConfigurer() {
+//            @Override
+//            public void addCorsMappings(CorsRegistry registry) {
+//                registry.addMapping("/**").allowedOrigins("*").allowedMethods("*");
+//            }
+//        };
+//    }
 }
