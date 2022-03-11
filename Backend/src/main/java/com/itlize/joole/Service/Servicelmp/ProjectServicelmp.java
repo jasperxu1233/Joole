@@ -3,6 +3,7 @@ package com.itlize.joole.Service.Servicelmp;
 import com.itlize.joole.Entity.Product;
 import com.itlize.joole.Entity.Project;
 import com.itlize.joole.Entity.User;
+import com.itlize.joole.Repository.ProjectProductRepository;
 import com.itlize.joole.Repository.ProjectRepository;
 import com.itlize.joole.Service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class ProjectServicelmp implements ProjectService {
     @Autowired
     ProjectRepository projectRepository;
 
+    @Autowired
+    ProjectProductRepository projectProductRepository;
+
     @Override
     public Project creatProject(Project project) {//test_1
 
@@ -32,7 +36,7 @@ public class ProjectServicelmp implements ProjectService {
     }
 
     @Override
-    public Project createProjectByProjectName(String projectName) {
+    public Project createProjectByProjectName(String projectName, User user) {
         Project project = new Project();
         project.setProjectName(projectName);
 
@@ -41,6 +45,8 @@ public class ProjectServicelmp implements ProjectService {
             System.out.println("This project already existed");
             return projectfromDB;
         }
+        project.setUser(user);
+        user.getProjectList().add(project);
         return projectRepository.save(project);
     }
 
@@ -66,40 +72,47 @@ public class ProjectServicelmp implements ProjectService {
 
     @Override
     @Transactional
-    public void deleteProjectByProjectId(Long id) {
+    public void deleteProjectByProjectId(Long id, User user) {
         Project project = projectRepository.getById(id);
-        if(project == null){
-            System.out.println("no this project");
+        if(project == null || !project.getUser().getUsername().equals(user.getUsername())){
+            System.out.println("no this project under the current user");
         }
-        System.out.println("delete the project " + project.getProjectName());
+        user.getProjectList().remove(project);
+        projectProductRepository.deleteAllByProjectId(id);
         projectRepository.deleteProjectById(id);
+        System.out.println("delete the project " + project.getProjectName());
     }
 
     @Override
     @Transactional
-    public void deleteProjectByProjectName(String projectName) {
+    public void deleteProjectByProjectName(String projectName, User user) {
         Project project = projectRepository.findByProjectName(projectName);
-        if(project == null){
-            System.out.println("no this project");
+        if(project == null || !project.getUser().getUsername().equals(user.getUsername())){
+            System.out.println("no this project under the current user");
         }
-        System.out.println("delete the project " + project.getProjectName());
+        user.getProjectList().remove(project);
+        projectProductRepository.deleteAllByProjectName(projectName);
         projectRepository.deleteByProjectName(projectName);
+        System.out.println("delete the project " + project.getProjectName());
     }
 
     @Override
     @Transactional
     public List<Project> deleteAllByUser(User user) {
+        Optional<List<Project>> projects = projectRepository.findAllByUser(user);
+        if(!projects.isPresent() || projects.get().size() == 0){
+            return null;
+        }
+        user.setProjectList(null);
+        for(Project project : projects.get()){
+            projectProductRepository.deleteAllByProjectId(project.getId());
+        }
         return projectRepository.deleteAllByUser(user).orElse(null);
     }
 
-
     //new
     @Override
-    public Project updateProject(String projectNameOld, String projectNameNew) {
-        Project project = projectRepository.findByProjectName(projectNameOld);
-        if(project == null){
-            return null;
-        }
+    public Project updateProject(String projectNameNew, Project project) {
         project.setProjectName(projectNameNew);
         return projectRepository.save(project);
     }

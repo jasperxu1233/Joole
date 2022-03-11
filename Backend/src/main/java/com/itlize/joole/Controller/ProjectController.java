@@ -34,88 +34,73 @@ public class ProjectController {        //NOT BEEN TESTED
     @Autowired
     ProjectProductService projectProductService;
 
-    //NOT DONE
+    @GetMapping("/getCurrentUser")
     private User getCurrentUser(Principal principal) {
-        //authentication stuff
         return userService.findByUsername(principal.getName());
     }
 
     @GetMapping("/getAllProject")
-    public ResponseEntity<?> getAllProjects( //get all projects from current user
-//            Principal principal
-    ) {
-//        User currentUser = getCurrentUser(principal);
-//        List<Project> projects = projectService.findAllByUser(currentUser);
-
-        List<Project> projects = projectService.findAll();
+    public ResponseEntity<?> getAllProjects(Principal principal) {   //get all projects from current user
+        User currentUser = getCurrentUser(principal);
+        List<Project> projects = projectService.findAllByUser(currentUser);
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     //check if this project belogs to user
     @GetMapping("/getProject")
-    public ResponseEntity<?> getProject(@RequestParam(name = "projectName") String projectName)  {
+    public ResponseEntity<?> getProject(@RequestParam(name = "projectName") String projectName, Principal principal)  {
         Project project = projectService.findByProjectName(projectName);
-        return new ResponseEntity<>(project, HttpStatus.OK);
+        Boolean res = project.getUser().getUsername().equals(principal.getName());
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
     @PostMapping("/createProject")
-    public ResponseEntity<?> createProject(
-//            Principal principal,
-            @RequestParam(name = "projectName") String projectName) {
-//        User currentUser = getCurrentUser(principal);
-//        Project project = new Project();
-     //   project.setId(project.getId());
-//        project.setProjectName(projectName);
-        Project project = projectService.createProjectByProjectName(projectName);
-        return new ResponseEntity<>(project, HttpStatus.CREATED);
+    public ResponseEntity<?> createProject(@RequestParam(name = "projectName") String projectName, Principal principal) {
+        Project res = projectService.createProjectByProjectName(projectName, getCurrentUser(principal));
+        return new ResponseEntity<>(res, HttpStatus.CREATED);
     }
 
 //    addProject(Project project)
 
     @DeleteMapping ("/deleteProjectById")
-    public ResponseEntity<?> deleteProjectById(
-//            Principal principal,
-            @RequestParam(name = "projectId") Long projectId) {
-//        User currentUser = getCurrentUser(principal);
-        projectService.deleteProjectByProjectId(projectId);
+    public ResponseEntity<?> deleteProjectById(@RequestParam(name = "projectId") Long projectId, Principal principal) {
+        projectService.deleteProjectByProjectId(projectId, getCurrentUser(principal));
         String message = "A project with id: " + projectId + " has been deleted.";
         return new ResponseEntity<>(message, HttpStatus.OK);//cant be null
     }
 
     @DeleteMapping("/deleteProject")
-    public ResponseEntity<?> deleteProject(
-//            Principal principal,
-            @RequestParam(name = "projectName") String projectName) {
-//        User currentUser = getCurrentUser(principal);
-        projectService.deleteProjectByProjectName(projectName);
+    public ResponseEntity<?> deleteProject(@RequestParam(name = "projectName") String projectName, Principal principal) {
+        projectService.deleteProjectByProjectName(projectName, getCurrentUser(principal));
         String message = "A project with id: " + projectName + " has been deleted.";
         return new ResponseEntity<>(message, HttpStatus.OK);//cant be null
     }
 
     @DeleteMapping("/deleteAllProject")
-    public ResponseEntity<?> deleteAllProjects(
-//            Principal principal,
-            @RequestParam(name = "userName") String userName) {
+    public ResponseEntity<?> deleteAllProjects(@RequestParam(name = "userName") String userName, Principal principal) {
+        if(!userName.equals(principal.getName())){
+            return new ResponseEntity<>("Don't delete others' projects!", HttpStatus.OK);
+        }
 //        User currentUser = getCurrentUser(principal);
 //        List<Project> projects = projectService.deleteAllProject(currentUser);
-        User user = userService.findByUsername(userName);
-        List<Project> projects = projectService.deleteAllByUser(user);
+//        User user = userService.findByUsername(userName);
+        List<Project> projects = projectService.deleteAllByUser(getCurrentUser(principal));
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
     @PostMapping("/updateProject")
-    public ResponseEntity<?> updateProject(
-//            Principal principal,
+    public ResponseEntity<?> updateProject(Principal principal,
             @RequestParam(name = "projectNameOld") String projectNameOld,
             @RequestParam(name = "projectNameNew") String projectNameNew) {
-//        User currentUser = getCurrentUser(principal);
-
-        Project project = projectService.updateProject(projectNameOld, projectNameNew);
+        Project project = projectService.findByProjectName(projectNameOld);
         if (project == null) {
             String message = "There is no project with the name " + projectNameOld;
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
-        return new ResponseEntity<>(project, HttpStatus.OK);
+        if(!project.getUser().getUsername().equals(principal.getName())){
+            return new ResponseEntity<>("Don't change others' project!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(projectService.updateProject(projectNameNew, project), HttpStatus.OK);
     }
 
 //    @PostMapping("/addProductToProject")
@@ -131,13 +116,20 @@ public class ProjectController {        //NOT BEEN TESTED
 //    }
 
     @PostMapping("/addProductToProject")
-    public ResponseEntity<?> addProductToProject(
-//            Principal principal,
-             @RequestParam(name = "projectId") String projectId,    //maybe change to projectName?
-             @RequestParam(name = "productId") String productId) {  //maybe change to productName?
+    public ResponseEntity<?> addProductToProject(Principal principal,
+             @RequestParam(name = "projectId") Long projectId,    //maybe change to projectName?
+             @RequestParam(name = "productId") Long productId) {  //maybe change to productName?
         //check first before adding, if ProjectProduct exist => do nothing, otherwise add it.
+        Project project = projectService.findByProjectId(projectId);
+        if (project == null) {
+            String message = "There is no project with the ID " + projectId;
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        if(!project.getUser().getUsername().equals(principal.getName())){
+            return new ResponseEntity<>("Don't change others' project!", HttpStatus.OK);
+        }
         ProjectProduct projectProduct = projectProductService.addProductToProject(
-                projectService.findByProjectId(Long.valueOf(projectId)), productService.findByProductId(Long.valueOf(productId)));
+                project, productService.findByProductId(productId));
         return new ResponseEntity<>(projectProduct, HttpStatus.OK);
     }
 

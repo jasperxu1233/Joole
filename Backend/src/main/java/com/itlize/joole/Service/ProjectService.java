@@ -19,14 +19,14 @@ public interface ProjectService {
 
     Project findByProjectName(String projectName);
 
-    void deleteProjectByProjectId(Long projectId);
+    void deleteProjectByProjectId(Long projectId, User user);
 
-    void deleteProjectByProjectName(String projectName);
+    void deleteProjectByProjectName(String projectName, User user);
 
     //update
-    Project updateProject(String projectNameOld, String projectNameNew);
+    Project updateProject(String projectNameNew, Project project);
 
-    Project createProjectByProjectName(String projectName);
+    Project createProjectByProjectName(String projectName, User user);
 
     List<Project> deleteAllByUser(User user);
 }

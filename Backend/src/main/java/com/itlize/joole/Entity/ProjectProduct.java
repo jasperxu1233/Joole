@@ -31,6 +31,7 @@ public class ProjectProduct {
 //    @Column(name = "product")
     private Product product;
 
+
 //    @JsonIgnore
     @ManyToOne(targetEntity = Project.class, cascade = CascadeType.DETACH)
 //    @Column(name = "project")

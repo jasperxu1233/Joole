@@ -24,6 +24,7 @@ public class ProjectProductServicelmp implements ProjectProductService {
 
     @Override
     public ProjectProduct addProductToProject(Project project, Product product) {
+        ProjectProduct projectProduct = projectProductRepository.findAllByProductAndProject(product, project);
         ProjectProduct projectProduct = new ProjectProduct();
         projectProduct.setProduct(product);
         projectProduct.setProject(project);

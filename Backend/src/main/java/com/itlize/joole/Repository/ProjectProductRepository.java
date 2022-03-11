@@ -17,6 +17,12 @@ public interface ProjectProductRepository extends JpaRepository<ProjectProduct, 
 
     Optional<List<ProjectProduct>> findByProductId(Long productId);
 
+    void deleteAllByProjectId(Long projectId);
+
+    void deleteAllByProjectName(String projectName);
+
+    List<ProjectProduct> findAllByProductAndProject(Product product, Project project);
+
 //    void deleteByProduct(Product product);
 //
 //    void deleteByProject(Project project);
