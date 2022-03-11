@@ -25,11 +25,13 @@ public class ProjectProductServicelmp implements ProjectProductService {
     @Override
     public ProjectProduct addProductToProject(Project project, Product product) {
         ProjectProduct projectProduct = projectProductRepository.findAllByProductAndProject(product, project);
-        ProjectProduct projectProduct = new ProjectProduct();
-        projectProduct.setProduct(product);
-        projectProduct.setProject(project);
-        createProjectProduct(projectProduct);
-        return projectProduct;
+        if(projectProduct != null){
+            return projectProduct;
+        }
+        ProjectProduct projectProduct1 = new ProjectProduct();
+        projectProduct1.setProduct(product);
+        projectProduct1.setProject(project);
+        return createProjectProduct(projectProduct1);
     }
 
 //    @Override
@@ -48,24 +50,28 @@ public class ProjectProductServicelmp implements ProjectProductService {
 
     @Override
     @Transactional
-    public void deleteByProductIdAndProjectId(Long productId, Long projectId) {
-        projectProductRepository.deleteByProductIdAndProjectId(productId, projectId);
+    public ProjectProduct deleteByProductIdAndProjectId(Long productId, Long projectId) {
+        ProjectProduct projectProduct = projectProductRepository.findAllByProductIdAndProjectId(productId, projectId);
+        if(projectProduct == null){
+            return projectProduct;
+        }
+        return  projectProductRepository.deleteByProductIdAndProjectId(productId, projectId);
     }
 
     @Override
     public List<ProjectProduct> findByProjectId(Long projectId) {
-        return projectProductRepository.findByProjectId(projectId).orElse(null);
+        return projectProductRepository.findAllByProjectId(projectId).orElse(null);
     }
 
     @Override
     public List<ProjectProduct> findByProductId(Long productId) {
-        return projectProductRepository.findByProductId(productId).orElse(null);
+        return projectProductRepository.findAllByProductId(productId).orElse(null);
     }
 
     @Override
     public List<Product> findAllProductByProjectId(Long projectId) {
         List<Product> products = new ArrayList<>();
-        List<ProjectProduct> projectProducts = projectProductRepository.findByProjectId(projectId).orElse(null);
+        List<ProjectProduct> projectProducts = projectProductRepository.findAllByProjectId(projectId).orElse(null);
         if(projectProducts == null){
             return null;
         }
@@ -76,14 +82,17 @@ public class ProjectProductServicelmp implements ProjectProductService {
     }
 
     @Override
-    public List<Project> findAllProjectByProductId(Long productId) {
+    public List<Project> findAllProjectByProductId(Long productId, String userName) {
         List<Project> projects = new ArrayList<>();
-        List<ProjectProduct> projectProducts = projectProductRepository.findByProductId(productId).orElse(null);
+        List<ProjectProduct> projectProducts = projectProductRepository.findAllByProductId(productId).orElse(null);
         if(projectProducts == null){
             return null;
         }
         for (ProjectProduct projectProduct : projectProducts) {
-            projects.add(projectProduct.getProject());
+            Project project = projectProduct.getProject();
+            if(project.getUser().getUsername().equals(userName)){
+                projects.add(project);
+            }
         }
         return projects;
     }

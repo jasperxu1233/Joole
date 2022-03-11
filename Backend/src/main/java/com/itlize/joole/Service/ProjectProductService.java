@@ -3,6 +3,7 @@ package com.itlize.joole.Service;
 import com.itlize.joole.Entity.Product;
 import com.itlize.joole.Entity.Project;
 import com.itlize.joole.Entity.ProjectProduct;
+import com.itlize.joole.Entity.User;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ public interface ProjectProductService {
 
     ProjectProduct findById(Long projectProductId);
 
-    void deleteByProductIdAndProjectId(Long productId, Long projectId);
+    ProjectProduct deleteByProductIdAndProjectId(Long productId, Long projectId);
 
     List<ProjectProduct> findByProjectId(Long projectId);
 
@@ -24,7 +25,7 @@ public interface ProjectProductService {
 
     List<Product> findAllProductByProjectId(Long projectId);
 
-    List<Project> findAllProjectByProductId(Long productId);
+    List<Project> findAllProjectByProductId(Long productId, String userName);
 
 //    //new
 //    void deleteByProduct(Product product);

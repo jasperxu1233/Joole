@@ -121,38 +121,56 @@ public class ProjectController {        //NOT BEEN TESTED
              @RequestParam(name = "productId") Long productId) {  //maybe change to productName?
         //check first before adding, if ProjectProduct exist => do nothing, otherwise add it.
         Project project = projectService.findByProjectId(projectId);
-        if (project == null) {
-            String message = "There is no project with the ID " + projectId;
+        if (project == null || productService.findByProductId(productId) == null) {
+            String message = "There is no project or product with its ID ";
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
         if(!project.getUser().getUsername().equals(principal.getName())){
             return new ResponseEntity<>("Don't change others' project!", HttpStatus.OK);
         }
-        ProjectProduct projectProduct = projectProductService.addProductToProject(
-                project, productService.findByProductId(productId));
+        ProjectProduct projectProduct = projectProductService.addProductToProject(project, productService.findByProductId(productId));
         return new ResponseEntity<>(projectProduct, HttpStatus.OK);
     }
 
     @DeleteMapping("/deleteProductFromProject")
     @Transactional
-    public ResponseEntity<?> deleteProductFromProject(
-            //            Principal principal,
-            @RequestParam(name = "projectId") String projectId,     //maybe change to projectName?
-            @RequestParam(name = "productId") String productId) {   //maybe change to productName?
-        projectProductService.deleteByProductIdAndProjectId(Long.valueOf(productId), Long.valueOf(projectId));
+    public ResponseEntity<?> deleteProductFromProject(Principal principal,
+            @RequestParam(name = "projectId") Long projectId,     //maybe change to projectName?
+            @RequestParam(name = "productId") Long productId) {   //maybe change to productName?
+        Project project = projectService.findByProjectId(projectId);
+        if (project == null || productService.findByProductId(productId) == null) {
+            String message = "There is no project or product with its ID ";
+            return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        if(!project.getUser().getUsername().equals(principal.getName())){
+            return new ResponseEntity<>("Don't change others' project!", HttpStatus.OK);
+        }
+
+        projectProductService.deleteByProductIdAndProjectId(productId, projectId);
         String message = "The product with id: " + productId + " has been deleted " + "from project with id: " + projectId;
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     //should be with username instead of id
     @GetMapping("/getAllProductByProjectId")
-    public  List<Product> getAllProductByProjectId(@RequestParam(name = "projectId") Long projectId) {
-        return projectProductService.findAllProductByProjectId(projectId);
+    public  ResponseEntity<?> getAllProductByProjectId(@RequestParam(name = "projectId") Long projectId, Principal principal) {
+        Project project = projectService.findByProjectId(projectId);
+        if(project == null){
+            return new ResponseEntity<>("No project in this DB!", HttpStatus.OK);
+        }
+        if(!project.getUser().getUsername().equals(principal.getName())){
+            return new ResponseEntity<>("You have no project about projectId: " + projectId, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(projectProductService.findAllProductByProjectId(projectId), HttpStatus.OK);
     }
 
     //should be with username instead of id
     @GetMapping("/getAllProjectByProductId")
-    public List<Project> getAllProjectByProductId(@RequestParam(name = "productId") Long productId) {
-        return projectProductService.findAllProjectByProductId(productId);
+    public ResponseEntity<?> getAllProjectByProductId(@RequestParam(name = "productId") Long productId, Principal principal) {
+        Product product = productService.findByProductId(productId);
+        if(product == null){
+            return new ResponseEntity<>("No product in this DB!", HttpStatus.OK);
+        }
+        return new ResponseEntity<>(projectProductService.findAllProjectByProductId(productId, principal.getName()), HttpStatus.OK);
     }
 }
