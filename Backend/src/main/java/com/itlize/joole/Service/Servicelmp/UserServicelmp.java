@@ -4,6 +4,7 @@ import com.itlize.joole.Entity.User;
 import com.itlize.joole.Repository.UserRepository;
 import com.itlize.joole.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ public class UserServicelmp implements UserService {
     UserRepository userRepository;
 
     @Autowired
+    //@Lazy
     private PasswordEncoder passwordEncoder;
 
     @Override
