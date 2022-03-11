@@ -1,0 +1,21 @@
+spring:
+
+  main:
+    allow-circular-references: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Xuhaojie1233
+    url: jdbc:mysql://127.0.0.1:3306/springSecurityAdvancedDemo?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+
+server:
+  servlet:
+    context-path: /springsecurity
+

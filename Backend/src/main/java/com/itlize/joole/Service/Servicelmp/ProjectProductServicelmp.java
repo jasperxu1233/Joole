@@ -50,28 +50,18 @@ public class ProjectProductServicelmp implements ProjectProductService {
 
     @Override
     @Transactional
-    public ProjectProduct deleteByProductIdAndProjectId(Long productId, Long projectId) {
-        ProjectProduct projectProduct = projectProductRepository.findAllByProductIdAndProjectId(productId, projectId);
+    public ProjectProduct deleteByProductAndProject(Product product, Project project) {
+        ProjectProduct projectProduct = projectProductRepository.findAllByProductAndProject(product, project);
         if(projectProduct == null){
             return projectProduct;
         }
-        return  projectProductRepository.deleteByProductIdAndProjectId(productId, projectId);
+        return  projectProductRepository.deleteByProductAndProject(product, project);
     }
 
     @Override
-    public List<ProjectProduct> findByProjectId(Long projectId) {
-        return projectProductRepository.findAllByProjectId(projectId).orElse(null);
-    }
-
-    @Override
-    public List<ProjectProduct> findByProductId(Long productId) {
-        return projectProductRepository.findAllByProductId(productId).orElse(null);
-    }
-
-    @Override
-    public List<Product> findAllProductByProjectId(Long projectId) {
+    public List<Product> findAllProductByProject(Project project) {
         List<Product> products = new ArrayList<>();
-        List<ProjectProduct> projectProducts = projectProductRepository.findAllByProjectId(projectId).orElse(null);
+        List<ProjectProduct> projectProducts = projectProductRepository.findAllByProject(project).orElse(null);
         if(projectProducts == null){
             return null;
         }
@@ -82,9 +72,9 @@ public class ProjectProductServicelmp implements ProjectProductService {
     }
 
     @Override
-    public List<Project> findAllProjectByProductId(Long productId, String userName) {
+    public List<Project> findAllProjectByProduct(Product product, String userName) {
         List<Project> projects = new ArrayList<>();
-        List<ProjectProduct> projectProducts = projectProductRepository.findAllByProductId(productId).orElse(null);
+        List<ProjectProduct> projectProducts = projectProductRepository.findAllByProduct(product).orElse(null);
         if(projectProducts == null){
             return null;
         }

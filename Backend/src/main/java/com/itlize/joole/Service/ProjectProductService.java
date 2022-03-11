@@ -17,15 +17,11 @@ public interface ProjectProductService {
 
     ProjectProduct findById(Long projectProductId);
 
-    ProjectProduct deleteByProductIdAndProjectId(Long productId, Long projectId);
+    ProjectProduct deleteByProductAndProject(Product product, Project project);
 
-    List<ProjectProduct> findByProjectId(Long projectId);
+    List<Product> findAllProductByProject(Project project);
 
-    List<ProjectProduct> findByProductId(Long productId);
-
-    List<Product> findAllProductByProjectId(Long projectId);
-
-    List<Project> findAllProjectByProductId(Long productId, String userName);
+    List<Project> findAllProjectByProduct(Product product, String userName);
 
 //    //new
 //    void deleteByProduct(Product product);

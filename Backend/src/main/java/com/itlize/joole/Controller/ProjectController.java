@@ -138,7 +138,8 @@ public class ProjectController {        //NOT BEEN TESTED
             @RequestParam(name = "projectId") Long projectId,     //maybe change to projectName?
             @RequestParam(name = "productId") Long productId) {   //maybe change to productName?
         Project project = projectService.findByProjectId(projectId);
-        if (project == null || productService.findByProductId(productId) == null) {
+        Product product = productService.findByProductId(productId);
+        if (project == null || product == null) {
             String message = "There is no project or product with its ID ";
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
@@ -146,7 +147,7 @@ public class ProjectController {        //NOT BEEN TESTED
             return new ResponseEntity<>("Don't change others' project!", HttpStatus.OK);
         }
 
-        projectProductService.deleteByProductIdAndProjectId(productId, projectId);
+        projectProductService.deleteByProductAndProject(product, project);
         String message = "The product with id: " + productId + " has been deleted " + "from project with id: " + projectId;
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
@@ -161,7 +162,7 @@ public class ProjectController {        //NOT BEEN TESTED
         if(!project.getUser().getUsername().equals(principal.getName())){
             return new ResponseEntity<>("You have no project about projectId: " + projectId, HttpStatus.OK);
         }
-        return new ResponseEntity<>(projectProductService.findAllProductByProjectId(projectId), HttpStatus.OK);
+        return new ResponseEntity<>(projectProductService.findAllProductByProject(project), HttpStatus.OK);
     }
 
     //should be with username instead of id
@@ -171,6 +172,6 @@ public class ProjectController {        //NOT BEEN TESTED
         if(product == null){
             return new ResponseEntity<>("No product in this DB!", HttpStatus.OK);
         }
-        return new ResponseEntity<>(projectProductService.findAllProjectByProductId(productId, principal.getName()), HttpStatus.OK);
+        return new ResponseEntity<>(projectProductService.findAllProjectByProduct(product, principal.getName()), HttpStatus.OK);
     }
 }

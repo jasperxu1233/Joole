@@ -78,7 +78,7 @@ public class ProjectServicelmp implements ProjectService {
             System.out.println("no this project under the current user");
         }
         user.getProjectList().remove(project);
-        projectProductRepository.deleteAllByProjectId(id);
+        projectProductRepository.deleteAllByProject(project);
         projectRepository.deleteProjectById(id);
         System.out.println("delete the project " + project.getProjectName());
     }
@@ -91,7 +91,7 @@ public class ProjectServicelmp implements ProjectService {
             System.out.println("no this project under the current user");
         }
         user.getProjectList().remove(project);
-        projectProductRepository.deleteAllByProjectName(projectName);
+        projectProductRepository.deleteAllByProject(project);
         projectRepository.deleteByProjectName(projectName);
         System.out.println("delete the project " + project.getProjectName());
     }
@@ -105,7 +105,7 @@ public class ProjectServicelmp implements ProjectService {
         }
         user.setProjectList(null);
         for(Project project : projects.get()){
-            projectProductRepository.deleteAllByProjectId(project.getId());
+            projectProductRepository.deleteAllByProject(project);
         }
         return projectRepository.deleteAllByUser(user).orElse(null);
     }

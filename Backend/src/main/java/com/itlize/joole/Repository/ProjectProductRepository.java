@@ -11,19 +11,15 @@ import java.util.Optional;
 
 @Repository
 public interface ProjectProductRepository extends JpaRepository<ProjectProduct, Long> {
-    ProjectProduct deleteByProductIdAndProjectId(Long productId, Long projectId);
+    ProjectProduct deleteByProductAndProject(Product product, Project project);
 
-    Optional<List<ProjectProduct>> findAllByProjectId(Long projectId);
+    Optional<List<ProjectProduct>> findAllByProject(Project project);
 
-    Optional<List<ProjectProduct>> findAllByProductId(Long productId);
+    Optional<List<ProjectProduct>> findAllByProduct(Product product);
 
-    void deleteAllByProjectId(Long projectId);
-
-    void deleteAllByProjectName(String projectName);
+    void deleteAllByProject(Project project);
 
     ProjectProduct findAllByProductAndProject(Product product, Project project);
-
-    ProjectProduct findAllByProductIdAndProjectId(Long productId, Long projectId);
 
 //    void deleteByProduct(Product product);
 //
