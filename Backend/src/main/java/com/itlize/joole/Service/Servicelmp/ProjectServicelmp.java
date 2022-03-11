@@ -85,15 +85,15 @@ public class ProjectServicelmp implements ProjectService {
 
     @Override
     @Transactional
-    public void deleteProjectByProjectName(String projectName, User user) {
+    public String deleteProjectByProjectName(String projectName, User user) {
         Project project = projectRepository.findByProjectName(projectName);
         if(project == null || !project.getUser().getUsername().equals(user.getUsername())){
-            System.out.println("no this project under the current user");
+            return "no this project under the current user";
         }
         user.getProjectList().remove(project);
         projectProductRepository.deleteAllByProject(project);
         projectRepository.deleteByProjectName(projectName);
-        System.out.println("delete the project " + project.getProjectName());
+        return "delete the project " + project.getProjectName();
     }
 
     @Override

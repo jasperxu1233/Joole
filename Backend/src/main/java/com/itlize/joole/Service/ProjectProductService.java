@@ -17,7 +17,7 @@ public interface ProjectProductService {
 
     ProjectProduct findById(Long projectProductId);
 
-    ProjectProduct deleteByProductAndProject(Product product, Project project);
+    String deleteByProductAndProject(Product product, Project project);
 
     List<Product> findAllProductByProject(Project project);
 

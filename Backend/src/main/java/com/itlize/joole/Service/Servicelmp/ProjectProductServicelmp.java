@@ -50,12 +50,13 @@ public class ProjectProductServicelmp implements ProjectProductService {
 
     @Override
     @Transactional
-    public ProjectProduct deleteByProductAndProject(Product product, Project project) {
+    public String deleteByProductAndProject(Product product, Project project) {
         ProjectProduct projectProduct = projectProductRepository.findAllByProductAndProject(product, project);
         if(projectProduct == null){
-            return projectProduct;
+            return "There is no product under project with those ids.";
         }
-        return  projectProductRepository.deleteByProductAndProject(product, project);
+        projectProductRepository.deleteByProductAndProject(product, project);
+        return "The product has been deleted from the project.";
     }
 
     @Override

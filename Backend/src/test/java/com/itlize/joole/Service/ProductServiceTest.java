@@ -17,21 +17,42 @@ class ProductServiceTest {
     @Autowired
     ProductService productService;
 
-//    @Test
-//    void createProduct() {
-//        Product product1 = new Product();
-//        product1.setId(1L);
-//        product1.setModelYear(2018);
-//        product1.setFanSpeedMin(69);
-//        product1.setFanSpeedMax(420);
-//
-//        productService.createProduct(product1);
-//
-//        System.out.println(product1);
-//
-//        Assertions.assertNotNull(product1);
-//    }
-//
+    @Test
+    void createProduct() {
+        Product product1 = new Product();
+
+        product1.setModelYear(2018);
+        product1.setFanSpeedMin(69);
+        product1.setFanSpeedMax(420);
+        product1.setManufacturer("HAOJIE_LLC");
+
+        productService.createProduct(product1);
+    }
+
+    @Test
+    void createProduct2() {
+        Product product2 = new Product();
+
+        product2.setModelYear(2222);
+        product2.setFanSpeedMin(69);
+        product2.setFanSpeedMax(420);
+        product2.setManufacturer("HAOJIE_LLC");
+
+        productService.createProduct(product2);
+    }
+
+    @Test
+    void createProduct3() {
+        Product product3 = new Product();
+
+        product3.setModelYear(3333);
+        product3.setFanSpeedMin(69);
+        product3.setFanSpeedMax(420);
+        product3.setManufacturer("HAOJIE_LLC");
+
+        productService.createProduct(product3);
+    }
+
 //    @Test
 //    void findByProductId() {
 //        Product product2 = new Product();

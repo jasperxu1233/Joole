@@ -49,9 +49,16 @@ public class ProjectController {        //NOT BEEN TESTED
     //check if this project belogs to user
     @GetMapping("/getProject")
     public ResponseEntity<?> getProject(@RequestParam(name = "projectName") String projectName, Principal principal)  {
+//        return new ResponseEntity<>("Hi", HttpStatus.OK);
         Project project = projectService.findByProjectName(projectName);
-        Boolean res = project.getUser().getUsername().equals(principal.getName());
-        return new ResponseEntity<>(res, HttpStatus.OK);
+        if(project == null){
+            return new ResponseEntity<>("No this project in the DB", HttpStatus.OK);
+        }
+        boolean res = project.getUser().getUsername().equals(getCurrentUser(principal).getUsername());
+        if(res){
+            return new ResponseEntity<>(project, HttpStatus.OK);
+        }
+        return new ResponseEntity<>("It's not your project!", HttpStatus.OK);
     }
 
     @PostMapping("/createProject")
@@ -71,9 +78,9 @@ public class ProjectController {        //NOT BEEN TESTED
 
     @DeleteMapping("/deleteProject")
     public ResponseEntity<?> deleteProject(@RequestParam(name = "projectName") String projectName, Principal principal) {
-        projectService.deleteProjectByProjectName(projectName, getCurrentUser(principal));
-        String message = "A project with id: " + projectName + " has been deleted.";
-        return new ResponseEntity<>(message, HttpStatus.OK);//cant be null
+        String result = projectService.deleteProjectByProjectName(projectName, getCurrentUser(principal));
+//        String message = "A project with id: " + projectName + " has been deleted.";
+        return new ResponseEntity<>(result, HttpStatus.OK);//cant be null
     }
 
     @DeleteMapping("/deleteAllProject")
@@ -96,6 +103,10 @@ public class ProjectController {        //NOT BEEN TESTED
         if (project == null) {
             String message = "There is no project with the name " + projectNameOld;
             return new ResponseEntity<>(message, HttpStatus.OK);
+        }
+        Project projectNew = projectService.findByProjectName(projectNameNew);
+        if(projectNew != null){
+            return new ResponseEntity<>("New name has been used, choose another one", HttpStatus.OK);
         }
         if(!project.getUser().getUsername().equals(principal.getName())){
             return new ResponseEntity<>("Don't change others' project!", HttpStatus.OK);
@@ -134,6 +145,7 @@ public class ProjectController {        //NOT BEEN TESTED
 
     @DeleteMapping("/deleteProductFromProject")
     @Transactional
+    //delete the ProjectProduct by the Project id and Product id
     public ResponseEntity<?> deleteProductFromProject(Principal principal,
             @RequestParam(name = "projectId") Long projectId,     //maybe change to projectName?
             @RequestParam(name = "productId") Long productId) {   //maybe change to productName?
@@ -143,12 +155,12 @@ public class ProjectController {        //NOT BEEN TESTED
             String message = "There is no project or product with its ID ";
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
-        if(!project.getUser().getUsername().equals(principal.getName())){
+        if(!project.getUser().getUsername().equals(getCurrentUser(principal).getUsername())){
             return new ResponseEntity<>("Don't change others' project!", HttpStatus.OK);
         }
 
-        projectProductService.deleteByProductAndProject(product, project);
-        String message = "The product with id: " + productId + " has been deleted " + "from project with id: " + projectId;
+        String message = projectProductService.deleteByProductAndProject(product, project);
+//        String message = "The product with id: " + productId + " has been deleted " + "from project with id: " + projectId;
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 

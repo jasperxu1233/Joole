@@ -21,7 +21,7 @@ public interface ProjectService {
 
     void deleteProjectByProjectId(Long projectId, User user);
 
-    void deleteProjectByProjectName(String projectName, User user);
+    String deleteProjectByProjectName(String projectName, User user);
 
     //update
     Project updateProject(String projectNameNew, Project project);
