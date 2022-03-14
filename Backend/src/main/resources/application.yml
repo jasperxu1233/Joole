@@ -6,7 +6,7 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: Toi_2605
+    password: Xuhaojie1233
     url: jdbc:mysql://127.0.0.1:3306/joole?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 
   jpa:
@@ -18,4 +18,5 @@ spring:
 server:
   servlet:
     context-path: /joole
+#    context-path:postman测试的8080后面的uri
 
